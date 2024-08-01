@@ -1,6 +1,6 @@
 import { type Collection, type Db, MongoClient } from 'mongodb'
 // We are importing the book type here, so we can keep our types consistent with the front end
-import { type Book } from '../../adapter/assignment-3'
+import { type Book } from '../adapter/assignment-3'
 
 // This is the connection string for the mongo database in our docker compose file
 // We're using process.env to detect if a different mongo uri is set, primarily for testing purpuses

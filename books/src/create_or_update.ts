@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { type BookDatabaseAccessor } from '../database_access'
+import { type BookDatabaseAccessor } from './database_access'
 import { type Book, type BookID } from '../../adapter/assignment-4'
 
 export default async function createOrUpdateBook (book: Book, books: BookDatabaseAccessor): Promise<BookID | false> {

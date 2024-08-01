@@ -1,4 +1,4 @@
-import { type Book, type Filter } from '../../adapter/assignment-4'
+import { type Book, type Filter } from '../../../adapter/assignment-4'
 import { type BookDatabaseAccessor } from '../database_access'
 
 export default async function listBooks (books: BookDatabaseAccessor, filters: Filter[]): Promise<Book[]> {

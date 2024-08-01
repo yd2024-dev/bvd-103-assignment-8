@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { getBookDatabase, type BookDatabaseAccessor } from '../database_access'
-import { type BookID, type Book } from '../../adapter/assignment-2'
+import { type BookID, type Book } from '../../../adapter/assignment-2'
 import { type ZodRouter } from 'koa-zod-router'
 import { ObjectId } from 'mongodb'
 import { generateId, seedBookDatabase } from '../../database_test_utilities'
