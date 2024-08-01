@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb'
 import { type ShelfId, type Book, type BookID, type OrderId } from './adapter/assignment-4'
 import { type BookDatabaseAccessor } from './src/database_access'
-import { type WarehouseDatabaseAccessor } from './src/warehouse/warehouse_database'
+import { type WarehouseDatabaseAccessor } from './src/warehouse_database'
 
 export async function seedBookDatabase (accessor: BookDatabaseAccessor, { books }: { books: Record<BookID, Book> }): Promise<void> {
   await Promise.all(Object.keys(books).map(async (id) => {

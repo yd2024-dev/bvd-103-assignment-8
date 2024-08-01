@@ -1,13 +1,12 @@
 import { ObjectId, type Collection, type Db } from 'mongodb'
 import { type BookID, type OrderId, type ShelfId } from '../../adapter/assignment-4'
-import { client } from '../database_access'
+import { client } from './database_access'
 import { type WarehouseData, InMemoryWarehouse } from './warehouse_data'
-import { generateId, seedWarehouseDatabase } from '../../database_test_utilities'
+import { generateId, seedWarehouseDatabase } from '../database_test_utilities'
 
 export interface WarehouseDatabaseAccessor {
   database: Db
   books: Collection<{ book: BookID, shelf: ShelfId, count: number }>
-  orders: Collection<{ books: Record<BookID, number> }>
 }
 export interface AppWarehouseDatabaseState {
   warehouse: WarehouseData
@@ -17,12 +16,10 @@ export async function getWarehouseDatabase (dbName?: string): Promise<WarehouseD
   const database = client.db(dbName ?? Math.floor(Math.random() * 100000).toPrecision())
   const books = database.collection<{ book: BookID, shelf: ShelfId, count: number }>('books')
   await books.createIndex({ book: 1, shelf: 1 }, { unique: true })
-  const orders = database.collection<{ books: Record<BookID, number> }>('orders')
 
   return {
     database,
-    books,
-    orders
+    books
   }
 }
 
@@ -55,28 +52,6 @@ export class DatabaseWarehouse implements WarehouseData {
     }
 
     return copies
-  }
-
-  async getOrder (order: OrderId): Promise<Record<BookID, number> | false> {
-    const result = await this.accessor.orders.findOne({ _id: ObjectId.createFromHexString(order) })
-    return result !== null ? result.books : false
-  }
-
-  async removeOrder (order: OrderId): Promise<void> {
-    await this.accessor.orders.deleteOne({ _id: ObjectId.createFromHexString(order) })
-  }
-
-  async listOrders (): Promise<Array<{ orderId: OrderId, books: Record<BookID, number> }>> {
-    const result = await this.accessor.orders.find().toArray()
-
-    return result.map(({ _id, books }) => {
-      return { orderId: _id.toHexString(), books }
-    })
-  }
-
-  async placeOrder (books: Record<string, number>): Promise<OrderId> {
-    const result = await this.accessor.orders.insertOne({ books })
-    return result.insertedId.toHexString()
   }
 }
 
@@ -125,35 +100,6 @@ if (import.meta.vitest !== undefined) {
     expect(dbResult.shelf_1).toEqual(5)
     expect(memResult.shelf_2).toEqual(dbResult.shelf_2)
     expect(dbResult.shelf_2).toEqual(3)
-  })
-
-  test('order crud works as expected', async () => {
-    const db = await getWarehouseDatabase()
-    const memData = new InMemoryWarehouse()
-    const dbData = new DatabaseWarehouse(db)
-
-    const [memOrderId, dbOrderId] = await Promise.all([memData.placeOrder({ book: 2 }), dbData.placeOrder({ book: 2 })])
-    const [memOrder, dbOrder] = await Promise.all([memData.getOrder(memOrderId), dbData.getOrder(dbOrderId)])
-
-    expect(memOrder).toMatchObject(dbOrder)
-    expect(dbOrder).toBeTruthy()
-    if (dbOrder !== false) {
-      expect(dbOrder.book).toEqual(2)
-    }
-
-    const [memOrderId2, dbOrderId2] = await Promise.all([memData.placeOrder({ book: 1 }), dbData.placeOrder({ book: 1 })])
-    const [memList, dbList] = await Promise.all([memData.listOrders(), dbData.listOrders()])
-
-    expect(memList.length).toEqual(dbList.length)
-    expect(dbList.length).toEqual(2)
-
-    await Promise.all([memData.removeOrder(memOrderId), dbData.removeOrder(dbOrderId)])
-    await Promise.all([memData.removeOrder(memOrderId2), dbData.removeOrder(dbOrderId2)])
-
-    const [memList2, dbList2] = await Promise.all([memData.listOrders(), dbData.listOrders()])
-
-    expect(memList2.length).toEqual(dbList2.length)
-    expect(dbList2.length).toEqual(0)
   })
 }
 
