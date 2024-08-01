@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitest/config'
-import vitestOpenapiPlugin from './vitest-openapi-plugin'
+import vitestOpenapiPlugin from '../vitest-openapi-plugin'
 
 export default defineConfig({
   test: {
