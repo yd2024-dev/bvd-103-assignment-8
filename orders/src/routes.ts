@@ -6,9 +6,8 @@ import { listOrders } from './list_orders'
 import { type ParameterizedContext, type DefaultContext, type Request as KoaRequest } from 'koa'
 import { type AppWarehouseDatabaseState } from './database'
 
-
-@Route('fulfil')
-export class FulfilOrderRoutes extends Controller {
+@Route('order')
+export class OrderRoutes extends Controller {
   /**
      * Fulfil an order by taking all the relevant book copies for the order off the shelves
      * @param order The Order ID
@@ -31,10 +30,7 @@ export class FulfilOrderRoutes extends Controller {
       console.error('Error Fulfilling Order', e)
     }
   }
-}
 
-@Route('order')
-export class OrderRoutes extends Controller {
   /**
      * Place an order
      * @param order An array of the ordered book id's

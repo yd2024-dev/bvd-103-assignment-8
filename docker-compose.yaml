@@ -11,24 +11,30 @@ services:
     volumes:
       - ./adapter:/source/adapter
       
-  server:
+  books:
     image: node:20
     volumes:
-      - ./:/app
+      - ./books:/app
+      - ./node_modules:/app/node_modules
+      - ./tsconfig.json:/app/tsconfig.json
     command: npx -y tsx ./index.ts
     working_dir: /app
 
-  server2:
+  orders:
     image: node:20
     volumes:
-      - ./:/app
+      - ./orders:/app
+      - ./node_modules:/app/node_modules
+      - ./tsconfig.json:/app/tsconfig.json
     command: npx -y tsx ./index.ts
     working_dir: /app
     
-  server3:
+  warehouse:
     image: node:20
     volumes:
-      - ./:/app
+      - ./warehouse:/app
+      - ./node_modules:/app/node_modules
+      - ./tsconfig.json:/app/tsconfig.json
     command: npx -y tsx ./index.ts
     working_dir: /app
 

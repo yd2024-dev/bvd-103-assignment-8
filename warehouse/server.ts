@@ -2,7 +2,6 @@ import Koa from 'koa'
 import cors from '@koa/cors'
 import qs from 'koa-qs'
 import zodRouter from 'koa-zod-router'
-import { setupBookRoutes } from './src/books'
 import { RegisterRoutes } from './build/routes'
 import swagger from './build/swagger.json'
 import KoaRouter from '@koa/router'
@@ -36,7 +35,6 @@ export default async function (port?: number, randomizeDbs?: boolean): Promise<{
 
   const router = zodRouter({ zodRouter: { exposeRequestErrors: true } })
 
-  setupBookRoutes(router, state.books)
 
   app.use(bodyParser())
   app.use(router.routes())
