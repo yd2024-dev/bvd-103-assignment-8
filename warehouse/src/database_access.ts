@@ -13,30 +13,3 @@ export const client = new MongoClient(uri)
 // We're moving the setup of the database and collections into a function with a returned value,
 // to allow us to isolate them in tests
 
-export interface BookDatabaseAccessor {
-  database: Db
-  books: Collection<Book>
-}
-
-export interface AppBookDatabaseState {
-  books: BookDatabaseAccessor
-}
-
-export function getBookDatabase (dbName?: string): BookDatabaseAccessor {
-  const database = client.db(dbName ?? Math.floor(Math.random() * 100000).toPrecision().toString())
-  const books = database.collection<Book>('books')
-
-  return {
-    database,
-    books
-  }
-}
-
-if (import.meta.vitest !== undefined) {
-  const { test, expect } = import.meta.vitest
-
-  test('Can Setup Test DB', () => {
-    const { database } = getBookDatabase()
-    expect(database.databaseName, `URI: ${uri}, DB: ${database.databaseName}`).not.toEqual('mcmasterful-books')
-  })
-}
