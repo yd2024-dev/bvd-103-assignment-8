@@ -35,10 +35,7 @@ export default async function (port?: number, randomizeDbs?: boolean): Promise<{
   // And we add cors to ensure we can access our API from the mcmasterful-books website
   app.use(cors())
 
-  const router = zodRouter({ zodRouter: { exposeRequestErrors: true } })
-
   app.use(bodyParser())
-  app.use(router.routes())
 
   const koaRouter = new KoaRouter()
 

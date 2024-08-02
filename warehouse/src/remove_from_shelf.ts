@@ -8,5 +8,7 @@ export async function removeBooksFromShelves ( data: WarehouseData, book: BookID
     if (newCopiesOnShelf < 0) {
       throw new Error('not enough copies on given shelves')
     }
+    console.log("REMOVING CORRECTLY")
     await data.placeBookOnShelf(book, shelf, numberOfBooks)
+    console.log("REMOVED!")
 }

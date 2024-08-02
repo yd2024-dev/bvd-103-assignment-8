@@ -89,7 +89,7 @@ async function findBookOnShelf (book: BookID): Promise<Array<{ shelf: ShelfId, c
 }
 
 async function fulfilOrder (order: OrderId, booksFulfilled: Array<{ book: BookID, shelf: ShelfId, numberOfBooks: number }>): Promise<void> {
-  const result = await fetch(`/api/fulfil/${order}`, {
+  const result = await fetch(`/api/order/${order}`, {
     method: 'put',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ booksFulfilled })

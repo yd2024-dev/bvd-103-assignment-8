@@ -1,5 +1,6 @@
 import { BookID, type Book } from "./documented_types";
 import amqp from "amqplib";
+import timers from "node:timers/promises";
 
 const send = {
     bookCreatedOrUpdated: async (book: Book) => {},
@@ -8,7 +9,18 @@ const send = {
 
 export async  function setupMessaging () {
     const channelName = 'books';
-    const conn = await amqp.connect("amqp://rabbitmq");
+    const conn = await new Promise<amqp.Connection>(async (resolve, reject) => {
+        for (let i = 0; i < 10; i++) {
+            try {
+                let result = await amqp.connect("amqp://rabbitmq");
+                return resolve(result);
+            } catch (e) {
+                await timers.setTimeout(1000);
+            }
+        }
+        console.error("Couldn't connect in time");
+        reject("Couldn't connect in time");
+    });
 
     const channel = await conn.createChannel();
     await channel.assertExchange(channelName, "topic", { durable: false});

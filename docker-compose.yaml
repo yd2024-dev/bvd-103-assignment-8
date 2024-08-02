@@ -1,5 +1,10 @@
 services:
   nginx:
+    depends_on:
+      - books
+      - orders
+      - warehouse
+      - front-end
     image: nginx
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
@@ -12,6 +17,9 @@ services:
       - ./adapter:/source/adapter
       
   books:
+    depends_on:
+      - mongo-books
+      - rabbitmq
     image: node:20
     volumes:
       - ./books:/app
@@ -21,6 +29,9 @@ services:
     working_dir: /app
 
   orders:
+    depends_on:
+      - mongo-order
+      - rabbitmq
     image: node:20
     volumes:
       - ./orders:/app
@@ -30,6 +41,9 @@ services:
     working_dir: /app
     
   warehouse:
+    depends_on:
+      - mongo-warehouse
+      - rabbitmq
     image: node:20
     volumes:
       - ./warehouse:/app
