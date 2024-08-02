@@ -10,6 +10,7 @@
       "@types/koa": "~2.15.0",
       "@types/koa__cors": "~5.0.0",
       "@types/koa__router": "^12.0.4",
+      "@types/amqplib": "0.10.4",
       "@types/koa-qs": "~2.0.3",
       "@typescript-eslint/eslint-plugin": "^6.21.0",
       "eslint": "^8.57.0",

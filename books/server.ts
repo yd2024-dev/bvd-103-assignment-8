@@ -9,9 +9,14 @@ import { koaSwagger } from 'koa2-swagger-ui'
 import bodyParser from 'koa-bodyparser'
 import { type Server, type IncomingMessage, type ServerResponse } from 'http'
 import { type AppBookDatabaseState, getBookDatabase } from './src/database_access'
+import { setupMessaging } from './src/messaging'
 
 export default async function (port?: number, randomizeDbs?: boolean): Promise<{ server: Server<typeof IncomingMessage, typeof ServerResponse>, state: AppBookDatabaseState }> {
   const bookDb = getBookDatabase(randomizeDbs === true ? undefined : 'mcmasterful-books')
+
+  if (!randomizeDbs) {
+    await setupMessaging();
+  }
 
   const state: AppBookDatabaseState = {
     books: bookDb,
