@@ -1,6 +1,6 @@
 import { BodyProp, Controller, Get, Path, Post, Put, Route, SuccessResponse, Request } from 'tsoa'
 import { getBookInfo } from './get_book_info'
-import { type ShelfId, type BookID} from './documented_types'
+import { type ShelfId, type BookID} from '../../documented_types'
 import { placeBooksOnShelf } from './place_on_shelf'
 import { type ParameterizedContext, type DefaultContext, type Request as KoaRequest } from 'koa'
 import { type AppWarehouseDatabaseState } from './warehouse_database'

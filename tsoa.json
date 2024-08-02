@@ -1,5 +1,4 @@
 {
-    "entryFile": "index.ts",
     "noImplicitAdditionalProperties": "throw-on-extras",
     "controllerPathGlobs": ["*/src/routes.ts"],
     "spec": {

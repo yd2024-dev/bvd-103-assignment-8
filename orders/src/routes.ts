@@ -1,5 +1,5 @@
 import { BodyProp, Controller, Get, Path, Post, Put, Route, SuccessResponse, Request } from 'tsoa'
-import { type ShelfId, type BookID, type OrderId, type FulfilledBooks, type OrderPlacement, type Order } from './documented_types'
+import { type ShelfId, type BookID, type OrderId, type FulfilledBooks, type OrderPlacement, type Order } from '../../documented_types'
 import { fulfilOrder } from './fulfil_order'
 import { placeOrder } from './place_order'
 import { listOrders } from './list_orders'

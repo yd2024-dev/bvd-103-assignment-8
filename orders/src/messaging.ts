@@ -1,4 +1,4 @@
-import { BookID, ShelfId } from "./documented_types";
+import { BookID, ShelfId } from "../../documented_types";
 import amqp from "amqplib";
 import timers from "node:timers/promises";
 

@@ -1,4 +1,4 @@
-import { BookID, ShelfId } from "./documented_types";
+import { BookID, ShelfId } from "../../documented_types";
 import amqp from "amqplib";
 import { removeBooksFromShelves } from "./remove_from_shelf";
 import { WarehouseData } from "./warehouse_data";

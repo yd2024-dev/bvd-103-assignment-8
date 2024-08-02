@@ -1,6 +1,6 @@
 import type * as koa from 'koa'
 import { Controller, Route, Request, Body, Post, Get, Path } from 'tsoa'
-import { type BookID, type Book, type Filter } from './documented_types'
+import { type BookID, type Book, type Filter } from '../../documented_types'
 import { type AppBookDatabaseState } from './database_access'
 import listBooks from './list'
 import createOrUpdateBook from './create_or_update'

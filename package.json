@@ -3,7 +3,8 @@
     "workspaces": [
         "books",
         "warehouse",
-        "orders"
+        "orders",
+        "docs"
     ],
     "devDependencies": {
       "@openapitools/openapi-generator-cli": "^2.13.1",

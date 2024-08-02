@@ -25,6 +25,7 @@ services:
       - ./books:/app
       - ./node_modules:/app/node_modules
       - ./tsconfig.json:/app/tsconfig.json
+      - ./documented_types.ts:/documented_types.ts
     command: npx -y tsx ./index.ts
     working_dir: /app
 
@@ -37,6 +38,7 @@ services:
       - ./orders:/app
       - ./node_modules:/app/node_modules
       - ./tsconfig.json:/app/tsconfig.json
+      - ./documented_types.ts:/documented_types.ts
     command: npx -y tsx ./index.ts
     working_dir: /app
     
@@ -49,8 +51,20 @@ services:
       - ./warehouse:/app
       - ./node_modules:/app/node_modules
       - ./tsconfig.json:/app/tsconfig.json
+      - ./documented_types.ts:/documented_types.ts
     command: npx -y tsx ./index.ts
     working_dir: /app
+
+  docs:
+    image: node:20
+    volumes:
+      - ./docs:/app
+      - ./node_modules:/app/node_modules
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./build/swagger.json:/app/swagger.json
+    command: npx -y tsx ./index.ts
+    working_dir: /app
+    
 
   mongo-books:
     image: mongo:latest
