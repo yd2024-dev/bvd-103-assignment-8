@@ -1,5 +1,5 @@
 import { ObjectId, type Collection, type Db } from 'mongodb'
-import { type BookID, type OrderId, type ShelfId } from '../../adapter/assignment-4'
+import { type BookID, type OrderId, type ShelfId } from '../../documented_types'
 import { client } from './database_access'
 import { type WarehouseData as OrderData, InMemoryWarehouse } from './data'
 

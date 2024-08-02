@@ -6,6 +6,10 @@
         "orders",
         "docs"
     ],
+    "scripts": {
+      "lint": "npm run lint --workspace=books && npm run lint --workspace=warehouse && npm run lint --workspace=orders",
+      "check-types": "npm run check-types --workspace=books && npm run check-types --workspace=warehouse && npm run check-types --workspace=orders"
+    },
     "devDependencies": {
       "@openapitools/openapi-generator-cli": "^2.13.1",
       "@types/koa": "~2.15.0",

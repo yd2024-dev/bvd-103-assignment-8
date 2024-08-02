@@ -5,8 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "start-server": "./generate-openapi.sh && tsx ./index.ts",
-    "lint": "./generate-openapi.sh && eslint ./**/*.ts",
-    "fix-lint": "./generate-openapi.sh && eslint --fix ./**/*.ts",
+    "lint": "./generate-openapi.sh && eslint --no-warn-ignored./**/*.ts",
+    "fix-lint": "./generate-openapi.sh && eslint --no-warn-ignored --fix ./**/*.ts",
     "check-types": "./generate-openapi.sh && tsc --noEmit",
     "test": "vitest",
     "test:ci": "vitest run"

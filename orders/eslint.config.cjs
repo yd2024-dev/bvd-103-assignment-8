@@ -1,9 +1,9 @@
-module.exports = {
+module.exports = [{
+    ...require("eslint-config-love"),
     "env": {
         "es2021": true,
         "node": true
     },
-    "extends": "standard-with-typescript",
     "overrides": [
         {
             "env": {
@@ -23,4 +23,4 @@ module.exports = {
     },
     "rules": {
     }
-}
+}]

@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { type ShelfId, type Book, type BookID, type OrderId } from '../adapter/assignment-4'
+import { type ShelfId, type Book, type BookID, type OrderId } from '../documented_types'
 import { type BookDatabaseAccessor } from './src/database_access'
 
 export async function seedBookDatabase (accessor: BookDatabaseAccessor, { books }: { books: Record<BookID, Book> }): Promise<void> {

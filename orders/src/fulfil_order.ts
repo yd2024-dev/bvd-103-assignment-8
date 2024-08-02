@@ -1,4 +1,4 @@
-import { type ShelfId, type BookID, type OrderId } from '../../adapter/assignment-4'
+import { type ShelfId, type BookID, type OrderId } from '../../documented_types'
 import { InMemoryWarehouse, type WarehouseData } from './data'
 import { removeBooksFromShelves } from './messaging'
 

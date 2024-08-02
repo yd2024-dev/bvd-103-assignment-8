@@ -1,7 +1,6 @@
 import Koa from 'koa'
 import cors from '@koa/cors'
 import qs from 'koa-qs'
-import zodRouter from 'koa-zod-router'
 import { RegisterRoutes } from './build/routes'
 import swagger from './build/swagger.json'
 import KoaRouter from '@koa/router'
