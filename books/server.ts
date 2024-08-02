@@ -14,7 +14,7 @@ import { setupMessaging } from './src/messaging'
 export default async function (port?: number, randomizeDbs?: boolean): Promise<{ server: Server<typeof IncomingMessage, typeof ServerResponse>, state: AppBookDatabaseState }> {
   const bookDb = getBookDatabase(randomizeDbs === true ? undefined : 'mcmasterful-books')
 
-  if (!randomizeDbs) {
+  if (!randomizeDbs && !(global as any).MONGO_URI ) {
     await setupMessaging();
   }
 
