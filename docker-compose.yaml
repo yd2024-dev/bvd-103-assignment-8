@@ -38,7 +38,11 @@ services:
     command: npx -y tsx ./index.ts
     working_dir: /app
 
-  mongo:
+  mongo-books:
+    image: mongo:latest
+  mongo-warehouse:
+    image: mongo:latest
+  mongo-order:
     image: mongo:latest
 
   rabbitmq:

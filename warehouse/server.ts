@@ -8,19 +8,21 @@ import KoaRouter from '@koa/router'
 import { koaSwagger } from 'koa2-swagger-ui'
 import bodyParser from 'koa-bodyparser'
 import { type Server, type IncomingMessage, type ServerResponse } from 'http'
-import { type AppBookDatabaseState, getBookDatabase } from './src/database_access'
 import { type AppWarehouseDatabaseState, getDefaultWarehouseDatabase } from './src/warehouse_database'
+import { setupMessaging } from './src/messaging'
 
-export default async function (port?: number, randomizeDbs?: boolean): Promise<{ server: Server<typeof IncomingMessage, typeof ServerResponse>, state: AppBookDatabaseState & AppWarehouseDatabaseState }> {
-  const bookDb = getBookDatabase(randomizeDbs === true ? undefined : 'mcmasterful-books')
+export default async function (port?: number, randomizeDbs?: boolean): Promise<{ server: Server<typeof IncomingMessage, typeof ServerResponse>, state: AppWarehouseDatabaseState }> {
   const warehouseDb = await getDefaultWarehouseDatabase(randomizeDbs === true ? undefined : 'mcmasterful-warehouse')
 
-  const state: AppBookDatabaseState & AppWarehouseDatabaseState = {
-    books: bookDb,
+  if (!randomizeDbs) {
+    await setupMessaging(warehouseDb);
+  }
+
+  const state:  AppWarehouseDatabaseState = {
     warehouse: warehouseDb
   }
 
-  const app = new Koa<AppBookDatabaseState & AppWarehouseDatabaseState, Koa.DefaultContext>()
+  const app = new Koa< AppWarehouseDatabaseState, Koa.DefaultContext>()
 
   app.use(async (ctx, next): Promise<void> => {
     ctx.state = state

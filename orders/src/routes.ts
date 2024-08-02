@@ -4,7 +4,7 @@ import { fulfilOrder } from './fulfil_order'
 import { placeOrder } from './place_order'
 import { listOrders } from './list_orders'
 import { type ParameterizedContext, type DefaultContext, type Request as KoaRequest } from 'koa'
-import { type AppWarehouseDatabaseState } from './database'
+import { type AppOrderDatabaseState } from './database'
 
 @Route('order')
 export class OrderRoutes extends Controller {
@@ -20,7 +20,7 @@ export class OrderRoutes extends Controller {
       @BodyProp('booksFulfilled') booksFulfilled: FulfilledBooks,
       @Request() request: KoaRequest
   ): Promise<void> {
-    const ctx: ParameterizedContext<AppWarehouseDatabaseState, DefaultContext> = request.ctx
+    const ctx: ParameterizedContext<AppOrderDatabaseState, DefaultContext> = request.ctx
     this.setStatus(201)
     try {
       await fulfilOrder(ctx.state.warehouse, order, booksFulfilled)
@@ -42,7 +42,7 @@ export class OrderRoutes extends Controller {
     @BodyProp('order') order: OrderPlacement,
       @Request() request: KoaRequest
   ): Promise<OrderId> {
-    const ctx: ParameterizedContext<AppWarehouseDatabaseState, DefaultContext> = request.ctx
+    const ctx: ParameterizedContext<AppOrderDatabaseState, DefaultContext> = request.ctx
     this.setStatus(201)
     try {
       const result = await placeOrder(ctx.state.warehouse, order)
@@ -60,7 +60,7 @@ export class OrderRoutes extends Controller {
   @Get()
   public async listOrders (
     @Request() request: KoaRequest): Promise<Order[]> {
-    const ctx: ParameterizedContext<AppWarehouseDatabaseState, DefaultContext> = request.ctx
+    const ctx: ParameterizedContext<AppOrderDatabaseState, DefaultContext> = request.ctx
     return await listOrders(ctx.state.warehouse)
   }
 }

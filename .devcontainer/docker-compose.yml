@@ -6,8 +6,12 @@ services:
     volumes:
       - ../..:/workspaces:cached
     command: sleep infinity
-
-  mongo:
+    
+  mongo-books:
+    image: mongo:latest
+  mongo-warehouse:
+    image: mongo:latest
+  mongo-order:
     image: mongo:latest
     
   rabbitmq:
