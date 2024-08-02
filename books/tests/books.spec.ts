@@ -2,7 +2,7 @@ import { expect, test } from 'vitest'
 import setup, { type ServerTestContext } from './run_server'
 import { Configuration, DefaultApi } from '../client'
 import { generateId, seedBookDatabase } from '../database_test_utilities'
-import { type BookID, type Book } from '../books/src/documented_types'
+import { type BookID, type Book } from '../src/documented_types'
 import { ObjectId } from 'mongodb'
 
 setup()
