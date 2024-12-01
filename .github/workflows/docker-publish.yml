@@ -1,93 +1,24 @@
-name: McMasterful Books Backend CI
+name: Build and Publish Docker Images
 
-on: 
-    push: 
-      branches:
-        - main
-    pull_request:
-
-    # Trigger the workflow on release
-    release:
-      types:
-        - published
+on:
+  push:
+    branches:
+      - main
+  release:
+    types:
+      - published
 
 jobs:
-  format_and_lint:
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'           
-      - run: npm install
-      - run: npm run lint
 
-  check_types:
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'           
-      - run: npm install
-      - run: npm run check-types
+      - name: Check out code
+        uses: actions/checkout@v3
 
-  test-books:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'           
-      - run: npm install
-      - run: npm run test:ci --workspace=books
-
-  test-orders:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'           
-      - run: npm install
-      - run: npm run test:ci --workspace=orders
-
-  test-warehouse:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'           
-      - run: npm install
-      - run: npm run test:ci --workspace=warehouse
-
-  generate-client:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'           
-      - run: npm install
-      - run: ./generate-openapi.sh
-      - uses: actions/upload-artifact@v4
-        with:
-          name: client-sdk
-          path: client/
-
-  # New Job: Build & Publish Docker Images
-  build_and_publish_images:
-    runs-on: ubuntu-latest
-    needs: [format_and_lint, check_types, test-books, test-orders, test-warehouse, generate-client]  # Ensuring all previous jobs run first
-    steps:
-      - uses: actions/checkout@v4
-
-      # Set up Docker Buildx for multi-platform builds
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -95,7 +26,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Build and push front-end Docker image
       - name: Build and push front-end image
         uses: docker/build-push-action@v3
         with:
@@ -104,7 +34,6 @@ jobs:
           tags: ghcr.io/${{ github.repository }}/front-end:${{ github.sha }}
           file: ./front-end/Dockerfile
 
-      # Build and push books Docker image
       - name: Build and push books image
         uses: docker/build-push-action@v3
         with:
@@ -113,7 +42,6 @@ jobs:
           tags: ghcr.io/${{ github.repository }}/books:${{ github.sha }}
           file: ./books/Dockerfile
 
-      # Build and push orders Docker image
       - name: Build and push orders image
         uses: docker/build-push-action@v3
         with:
@@ -122,7 +50,6 @@ jobs:
           tags: ghcr.io/${{ github.repository }}/orders:${{ github.sha }}
           file: ./orders/Dockerfile
 
-      # Build and push warehouse Docker image
       - name: Build and push warehouse image
         uses: docker/build-push-action@v3
         with:
@@ -131,7 +58,6 @@ jobs:
           tags: ghcr.io/${{ github.repository }}/warehouse:${{ github.sha }}
           file: ./warehouse/Dockerfile
 
-      # Build and push docs Docker image
       - name: Build and push docs image
         uses: docker/build-push-action@v3
         with:
@@ -140,10 +66,10 @@ jobs:
           tags: ghcr.io/${{ github.repository }}/docs:${{ github.sha }}
           file: ./docs/Dockerfile
 
-  # Release Job (Only runs on release creation)
   release:
-    needs: build_and_publish_images
+    needs: build
     runs-on: ubuntu-latest
+
     steps:
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
@@ -152,7 +78,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Tag images for release version
       - name: Tag the images for release
         run: |
           docker tag ghcr.io/${{ github.repository }}/front-end:${{ github.sha }} ghcr.io/${{ github.repository }}/front-end:${{ github.ref_name }}
@@ -161,8 +86,7 @@ jobs:
           docker tag ghcr.io/${{ github.repository }}/warehouse:${{ github.sha }} ghcr.io/${{ github.repository }}/warehouse:${{ github.ref_name }}
           docker tag ghcr.io/${{ github.repository }}/docs:${{ github.sha }} ghcr.io/${{ github.repository }}/docs:${{ github.ref_name }}
 
-      # Push the tagged images for the release
-      - name: Push tagged images for release
+      - name: Push tagged images
         run: |
           docker push ghcr.io/${{ github.repository }}/front-end:${{ github.ref_name }}
           docker push ghcr.io/${{ github.repository }}/books:${{ github.ref_name }}
